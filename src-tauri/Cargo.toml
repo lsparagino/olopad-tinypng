@@ -1,0 +1,23 @@
+[package]
+name = "tinypng-compressor"
+version = "0.9.0"
+description = "A TinyPNG image compressor"
+authors = ["you"]
+edition = "2021"
+
+[lib]
+name = "tinypng_compressor_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-opener = "2"
+tauri-plugin-dialog = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+reqwest = { version = "0.12", features = ["blocking", "rustls-tls"], default-features = false }
+dirs = "6"
+base64 = "0.22"

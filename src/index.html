@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TinyPNG Compressor</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="app">
+    <!-- Header -->
+    <div class="header" id="app-header">
+      <div class="header-left">
+        <span class="header-title">TinyPNG Compressor</span>
+      </div>
+      <div class="header-actions">
+        <div class="usage-badge hidden" id="usage-badge" title="Compressions this month">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+          </svg>
+          <span id="usage-count">0</span>
+        </div>
+        <button class="icon-btn" id="settings-btn" title="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Setup View (no API key) -->
+    <div class="view setup-view" id="setup-view">
+      <img class="setup-icon" src="assets/logo.svg" alt="Logo" />
+      <h2 class="setup-title">API Key Required</h2>
+      <p class="setup-subtitle">
+        Enter your TinyPNG API key to get started.<br>
+        Get one free at <strong>tinypng.com/developers</strong>
+      </p>
+      <div class="input-group">
+        <input type="password" class="input" id="setup-key-input" placeholder="Paste your API key..." spellcheck="false"
+          autocomplete="off" />
+        <button class="btn btn-primary" id="setup-key-btn">Validate</button>
+      </div>
+      <p class="error-text hidden" id="setup-error"></p>
+    </div>
+
+    <!-- Main View (drop zone + results) -->
+    <div class="view" id="main-view">
+      <!-- Drop Zone (shown when no active compression) -->
+      <div class="drop-zone" id="drop-zone">
+        <svg class="drop-zone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="17 8 12 3 7 8" />
+          <line x1="12" y1="3" x2="12" y2="15" />
+        </svg>
+        <p class="drop-zone-text">Drop images here to compress</p>
+        <p class="drop-zone-hint">PNG, JPEG, WebP, AVIF — or click to browse</p>
+      </div>
+
+      <!-- Results (shown during/after compression) -->
+      <div class="results-container hidden" id="results-container">
+        <div class="results-header">
+          <span class="results-title" id="results-title">Compressing...</span>
+        </div>
+        <div class="results-list" id="results-list"></div>
+        <div class="bottom-bar">
+          <button class="btn btn-secondary btn-new-batch" id="new-batch-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Compress more
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Overlay -->
+  <div class="settings-overlay" id="settings-overlay">
+    <div class="settings-panel">
+      <div class="settings-header">
+        <span class="settings-title">Settings</span>
+        <button class="icon-btn" id="settings-close-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- API Key -->
+      <div class="settings-section">
+        <label class="settings-label" for="settings-key-input">API Key</label>
+        <div class="settings-row">
+          <input type="password" class="input" id="settings-key-input" placeholder="Enter API key..." spellcheck="false"
+            autocomplete="off" />
+          <button class="btn btn-primary" id="settings-key-btn">Save</button>
+        </div>
+        <p class="error-text hidden" id="settings-key-error"></p>
+      </div>
+
+      <!-- Output Directory -->
+      <div class="settings-section">
+        <label class="settings-label" for="output-dir-display">Output Directory</label>
+        <div class="settings-row">
+          <div class="settings-value placeholder" id="output-dir-display">Default (compressed/ subfolder)</div>
+          <button class="btn btn-secondary" id="output-dir-btn">Browse</button>
+          <button class="btn btn-ghost" id="output-dir-reset" title="Reset to default">↺</button>
+        </div>
+      </div>
+
+      <div class="settings-divider"></div>
+
+      <!-- Send To Shortcut -->
+      <div class="send-to-section">
+        <div class="send-to-info">
+          <div class="send-to-title">Windows "Send To"</div>
+          <div class="send-to-desc">Right-click files → Send to → TinyPNG Compressor</div>
+        </div>
+        <button class="btn btn-secondary" id="send-to-btn">Install</button>
+      </div>
+
+      <div class="settings-divider"></div>
+
+      <!-- About -->
+      <div class="about-section">
+        <img class="about-logo" src="assets/logo.svg" alt="OloPad" />
+        <div class="about-version">TinyPNG Compressor <span class="text-dim">v0.9.0</span></div>
+        <div class="about-powered">Powered by <a href="https://olopad.com" target="_blank" class="about-link">OloPad</a>
+        </div>
+        <div class="about-links">
+          <a href="https://github.com/lsparagino" target="_blank" class="about-link">GitHub</a>
+          <span class="text-dim">·</span>
+          <a href="https://olopad.com" target="_blank" class="about-link">olopad.com</a>
+        </div>
+        <div class="about-copyright text-dim">© 2026 OloPad. All rights reserved.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="main.js"></script>
+</body>
+
+</html>
