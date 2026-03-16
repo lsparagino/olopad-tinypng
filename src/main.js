@@ -1,6 +1,7 @@
 const { invoke } = globalThis.__TAURI__.core;
 const { listen } = globalThis.__TAURI__.event;
 const { open } = globalThis.__TAURI__.dialog;
+const { getVersion } = globalThis.__TAURI__.app;
 
 const SUPPORTED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp', 'avif'];
 
@@ -72,6 +73,11 @@ async function init() {
 
     updateOutputDirDisplay();
     updateUsageBadge();
+
+    // Show version from Tauri config
+    getVersion().then((v) => {
+      document.getElementById('app-version').textContent = `v${v}`;
+    });
   } catch (e) {
     console.error('Failed to load config:', e);
     showView('setup');
@@ -237,7 +243,7 @@ async function handleBrowseFiles() {
   if (state.isCompressing) return;
 
   try {
-    const selected = await open({
+    const selected = open({
       multiple: true,
       filters: [
         {
@@ -260,7 +266,7 @@ async function handleBrowseFiles() {
 
 async function handleBrowseOutputDir() {
   try {
-    const dir = await open({
+    const dir = open({
       directory: true,
       multiple: false,
     });
@@ -388,7 +394,7 @@ function createResultItem(index, fileName, status, data = {}, filePath = null) {
     // Load thumbnail asynchronously via Rust
     invoke('read_image_thumbnail', { path: filePath }).then((dataUrl) => {
       img.src = dataUrl;
-    }).catch(() => {});
+    }).catch(() => { });
   }
   // Overlay icon for status
   const overlay = document.createElement('div');

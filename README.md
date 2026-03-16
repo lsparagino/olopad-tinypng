@@ -1,52 +1,85 @@
 # TinyPNG Compressor
 
-A Windows desktop app that compresses images using the [TinyPNG API](https://tinify.com/developers). Built with **Tauri v2** (Rust + HTML/CSS/JS).
+A lightweight Windows desktop app for compressing images using the [TinyPNG API](https://tinify.com/developers). Built with **Tauri v2** (Rust + HTML/CSS/JS).
 
-Supports drag-and-drop, file browser, Windows "Send To" integration, and persistent settings.
+![TinyPNG Compressor](screenshot.jpg)
+
+## Features
+
+- **Drag & drop** — Drop images directly onto the app to compress
+- **Image previews** — See thumbnails and per-file progress in real time
+- **Windows "Send To"** — Right-click images in Explorer → Send to → TinyPNG Compressor
+- **Smart output** — Saves to a `compressed/` subfolder by default, or pick your own
+- **Persistent settings** — API key, output directory, and usage count saved across sessions
+- **Portable** — Single `.exe`, no installation required
 
 **Supported formats:** PNG, JPEG, WebP, AVIF
 
-## Prerequisites
+## Download
+
+Grab the latest release from the [Releases page](https://github.com/lsparagino/olopad-tinypng/releases).
+
+| File | Description |
+|------|-------------|
+| `tinypng-compressor.exe` | Portable — just run it |
+| `TinyPNG Compressor_x64-setup.exe` | NSIS installer |
+| `TinyPNG Compressor_x64_en-US.msi` | MSI installer |
+
+## Getting Started
+
+1. Download and run the app
+2. Enter your [TinyPNG API key](https://tinypng.com/developers) (free, 500 compressions/month)
+3. Drop images or click to browse — done!
+
+## Windows "Send To"
+
+### Automatic (in-app)
+
+Open Settings → click **Install** to add the shortcut.
+
+### Manual setup
+
+1. Press `Win + R`, type `shell:sendto`, press Enter
+2. Copy `tinypng-compressor.exe` (or create a shortcut to it) into the folder
+3. Rename it to `TinyPNG Compressor` (optional)
+
+---
+
+## Development
+
+### Prerequisites
 
 - [Rust](https://rustup.rs/) (1.70+)
 - [Node.js](https://nodejs.org/) (18+)
 - [Microsoft Visual Studio C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
 
-## Setup
+### Setup
 
 ```powershell
 npm install
 ```
 
-## Development
+### Run Locally
 
 ```powershell
 npm run tauri dev
 ```
 
-First launch will compile ~450 Rust crates (takes a few minutes). Subsequent builds are incremental (~7s).
-
-## Build for Production
+### Build for Production
 
 ```powershell
 npm run tauri build
 ```
 
-The installer and portable `.exe` are output to:
+### Bump Version
 
-```
-src-tauri/target/release/
-├── tinypng-compressor.exe   # Portable (no install needed)
-└── bundle/
-    ├── msi/                 # MSI installer
-    └── nsis/                # NSIS installer
+```powershell
+npm run bump 1.0.0
 ```
 
-> The standalone `.exe` is fully portable — just copy it anywhere and run. No installation required.
+Updates `package.json`, `tauri.conf.json`, and `Cargo.toml`. The About section reads the version dynamically.
 
-## Regenerate Icons
-
-If you update the app icon (`icon_dark_bg.png`):
+### Regenerate Icons
 
 ```powershell
 npx -y @tauri-apps/cli@latest icon icon_dark_bg.png
@@ -68,6 +101,8 @@ npx -y @tauri-apps/cli@latest icon icon_dark_bg.png
 │   │   └── config.rs       # Persistent config (%APPDATA%)
 │   ├── Cargo.toml
 │   └── tauri.conf.json
+├── scripts/
+│   └── bump-version.js     # Version bump utility
 ├── logo_dark.svg           # Source logo
 └── icon_dark_bg.png        # Source icon
 ```
@@ -79,16 +114,6 @@ Settings are stored in `%APPDATA%/tinypng-compressor/config.json`:
 - **API Key** — get one free at [tinypng.com/developers](https://tinypng.com/developers)
 - **Output directory** — defaults to a `compressed/` subfolder next to source files
 
-## Windows "Send To"
+## License
 
-### Automatic (in-app)
-
-Use the **Install** button in Settings to add the shortcut automatically.
-
-### Manual setup
-
-1. Press `Win + R`, type `shell:sendto`, press Enter
-2. Copy `tinypng-compressor.exe` (or create a shortcut to it) into the opened folder
-3. Rename it to `TinyPNG Compressor` (optional)
-
-Then right-click any image in Explorer → **Send to → TinyPNG Compressor** to compress immediately.
+Powered by [OloPad](https://olopad.com) · © 2026 OloPad. All rights reserved.
