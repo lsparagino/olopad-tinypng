@@ -1,6 +1,6 @@
 [package]
 name = "tinypng-compressor"
-version = "0.9.1"
+version = "0.9.2"
 description = "A TinyPNG image compressor"
 authors = ["you"]
 edition = "2021"

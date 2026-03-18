@@ -129,6 +129,7 @@ body {
   display: none;
   flex: 1;
   flex-direction: column;
+  min-height: 0;
 }
 
 .view.active {
@@ -315,6 +316,7 @@ body {
   flex-direction: column;
   gap: 12px;
   overflow: hidden;
+  min-height: 0;
 }
 
 .results-header {
@@ -335,6 +337,7 @@ body {
   flex-direction: column;
   gap: 8px;
   padding-right: 4px;
+  min-height: 0;
 }
 
 .results-list::-webkit-scrollbar {
