@@ -2,7 +2,7 @@
 
 A lightweight Windows desktop app for compressing images using the [TinyPNG API](https://tinify.com/developers). Built with **Tauri v2** (Rust + HTML/CSS/JS).
 
-![TinyPNG Compressor](screenshot.jpg)
+![TinyPNG Compressor](docs/screenshot.jpg)
 
 ## Features
 
